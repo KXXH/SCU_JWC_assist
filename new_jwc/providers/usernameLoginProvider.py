@@ -6,7 +6,8 @@ import json
 import logging
 from ..config.headerConfig import header
 from ..config.loginConfig import LOGIN_PAGE_URL, CAPTCHA_URL, LOGIN_URL
-from ..utils.login_check import login_check
+from ..utils.login_check import login_check, check_error_code
+from ..exceptions.loginException import LoginException
 
 
 class UsernameLoginProvider:
@@ -21,11 +22,13 @@ class UsernameLoginProvider:
         }
         s = requests.Session()
         s.headers.update(header)
+        s.get(LOGIN_PAGE_URL)
         r = s.get(CAPTCHA_URL)
         captcha_img = Image.open(BytesIO(r.content))
         captcha_img.show()
         postDict['j_captcha'] = input('请输入验证码:')
         logging.info('正在登陆教务处……')
-        s.post(LOGIN_URL, data=postDict)
+        r = s.post(LOGIN_URL, data=postDict)
+        check_error_code(r)
         login_check(s)
         return s

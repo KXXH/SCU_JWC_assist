@@ -4,7 +4,7 @@ import datetime
 from icalendar import Calendar, Event, Alarm
 
 
-class CurriculumPhaser:
+class CurriculumParser:
     CLASS_SCHEDULE_URL = 'http://zhjw.scu.edu.cn/student/courseSelect/thisSemesterCurriculum/ajaxStudentSchedule/callback'
     FILENAME = 'classTable.ics'
     TIME_TABLE = {
@@ -22,8 +22,8 @@ class CurriculumPhaser:
         "12": datetime.timedelta(hours=21, minutes=10)
     }
 
-    def __init__(self, session, first_day):
-        self.session = session
+    def __init__(self, auth_provider, first_day):
+        self.session = auth_provider.login()
         self.stDate = self.setStDate(first_day)
 
     def setStDate(self, first_day):
