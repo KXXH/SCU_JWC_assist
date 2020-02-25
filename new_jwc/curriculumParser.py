@@ -22,8 +22,8 @@ class CurriculumParser:
         "12": datetime.timedelta(hours=21, minutes=10)
     }
 
-    def __init__(self, auth_provider, first_day):
-        self.session = auth_provider.login()
+    def __init__(self, provider, first_day):
+        self.provider = provider
         self.stDate = self.setStDate(first_day)
 
     def setStDate(self, first_day):
@@ -82,7 +82,7 @@ class CurriculumParser:
 
     def phase(self):
         logging.info('正在创建日历...')
-        classList = self.getClassList()
+        classList = self.provider.getClassList()
         cal = Calendar()
         cal['version'] = '2.0'
         if self.stDate.month >= 7:
