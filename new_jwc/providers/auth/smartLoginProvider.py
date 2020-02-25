@@ -1,9 +1,9 @@
 import logging
-from usernameLoginProvider import UsernameLoginProvider
-from sessionidLoginProvider import SessionidLoginProvider
-from rememberTokenProvider import RememberTokenProvider
-from ..exceptions.loginException import LoginException
-from ..config.loginConfig import JSESSIONID_KEY, REMEMBER_ME_COOKIE_KEY
+from .usernameLoginProvider import UsernameLoginProvider
+from .sessionidLoginProvider import SessionidLoginProvider
+from .rememberTokenProvider import RememberTokenProvider
+from ...exceptions.loginException import LoginException
+from ...config.loginConfig import JSESSIONID_KEY, REMEMBER_ME_COOKIE_KEY
 
 
 class SmartLoginProvider:

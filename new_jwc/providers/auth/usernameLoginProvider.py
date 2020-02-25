@@ -1,20 +1,20 @@
-from ..exceptions.loginException import LoginException
-from ..utils.login_check import login_check, check_error_code
 import hashlib
 import requests
 from PIL import Image
 from io import BytesIO
 import json
 import logging
-from sessionidLoginProvider import SessionidLoginProvider
-from ..config.headerConfig import header
-from ..config.loginConfig import LOGIN_PAGE_URL,
-CAPTCHA_URL, LOGIN_URL,
-USERNAME_FORM_KEY,
-PASSWORD_FORM_KEY,
-CAPTCHA_FORM_FEY,
-REMEMBER_ME_FORM_KEY,
-REMEMBER_ME_FORM_VALUE
+from ...exceptions.loginException import LoginException
+from ...utils.login_check import login_check, check_error_code
+from .sessionidLoginProvider import SessionidLoginProvider
+from ...config.headerConfig import header
+from ...config.loginConfig import (LOGIN_PAGE_URL,
+                                   CAPTCHA_URL, LOGIN_URL,
+                                   USERNAME_FORM_KEY,
+                                   PASSWORD_FORM_KEY,
+                                   CAPTCHA_FORM_FEY,
+                                   REMEMBER_ME_FORM_KEY,
+                                   REMEMBER_ME_FORM_VALUE)
 
 
 class UsernameLoginProvider:

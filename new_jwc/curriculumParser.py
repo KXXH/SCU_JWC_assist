@@ -5,8 +5,6 @@ from icalendar import Calendar, Event, Alarm
 
 
 class CurriculumParser:
-    CLASS_SCHEDULE_URL = 'http://zhjw.scu.edu.cn/student/courseSelect/thisSemesterCurriculum/ajaxStudentSchedule/callback'
-    FILENAME = 'classTable.ics'
     TIME_TABLE = {
         "1": datetime.timedelta(hours=8, minutes=15),
         "2": datetime.timedelta(hours=9, minutes=10),

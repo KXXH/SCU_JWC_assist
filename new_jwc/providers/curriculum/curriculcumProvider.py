@@ -2,6 +2,8 @@ import logging
 
 
 class CurriculcumProvider:
+    CLASS_SCHEDULE_URL = 'http://zhjw.scu.edu.cn/student/courseSelect/thisSemesterCurriculum/ajaxStudentSchedule/callback'
+
     def __init__(self, auth_provider):
         self.session = auth_provider.login()
 

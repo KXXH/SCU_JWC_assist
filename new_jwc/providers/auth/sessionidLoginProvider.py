@@ -1,7 +1,7 @@
 import requests
 import logging
-from ..utils.login_check import login_check
-from ..config.headerConfig import header
+from ...utils.login_check import login_check
+from ...config.headerConfig import header
 
 
 class SessionidLoginProvider:
