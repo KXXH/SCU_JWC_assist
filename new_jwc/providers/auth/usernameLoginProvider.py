@@ -18,6 +18,11 @@ from ...config.loginConfig import (LOGIN_PAGE_URL,
 
 
 class UsernameLoginProvider:
+    '''Use username and password to login.
+
+    使用用户名密码登录，每次调用login方法都需要手动输入验证码
+    '''
+
     def __init__(self, username, password):
         self.username = username
         self.password = hashlib.md5(password.encode()).hexdigest()

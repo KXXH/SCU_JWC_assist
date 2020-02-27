@@ -1,2 +1,4 @@
 *.ics
 __pycache__
+test.py
+*.log
