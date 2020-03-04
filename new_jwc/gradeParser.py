@@ -7,11 +7,11 @@ class GradeParser:
 
     def parse(self, filter=lambda x: True):
         gradeList = self.provider.get_grade()
-        grades = sorted(gradeList.get("list", {}).get(
-            "records", []), key=lambda x: x[0])
+        grades = sorted(gradeList, key=lambda x: x.term)
         logging.debug(grades)
         res = {}
         for grade in grades:
             if filter(grade):
-                res.setdefault(grade[11], (grade[8], grade[13]))
+                res.setdefault(
+                    grade.name, (grade.score.to_num(), grade.credit))
         return res
