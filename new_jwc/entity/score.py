@@ -43,6 +43,12 @@ class AbstractScore:
         """返回百分制的成绩
         """
 
+    def has_en_lavel(self):
+        """该成绩记录是否应该有英语等级
+        """
+
+        return True
+
     @abstractmethod
     def to_en_level(self) ->EnScoreLevel:
         """返回英语等级制(A/A-/B/...)的成绩
@@ -70,14 +76,19 @@ class AbstractScore:
 
 class NumericScore(AbstractScore):
     """数值型成绩
+
     转换算法参照《四川大学本科生等级成绩、百分制成绩、成绩绩点对照表》中，2017-2018秋季学期及以后部分之规定
     """
 
     BREAKPOINT = [60, 61, 63, 66, 70, 73, 76, 80, 85, 90]
-    EN_WORDS = ["F", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"]
+    EN_WORDS = [EnScoreLevel.F, EnScoreLevel.D, EnScoreLevel.Dplus,
+                EnScoreLevel.Cminus, EnScoreLevel.C, EnScoreLevel.Cplus,
+                EnScoreLevel.Bminus, EnScoreLevel.B, EnScoreLevel.Bplus,
+                EnScoreLevel.Aminus, EnScoreLevel.A]
     POINTS = [0, 1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4]
     ZH_BREAKPOINT = [60, 70, 76, 85]
-    ZH_WORDS = ["不合格", "合格", "中等", "良好", "优秀"]
+    ZH_WORDS = [ZhScoreLevel.FAILED, ZhScoreLevel.PASS,
+                ZhScoreLevel.AVERAGE, ZhScoreLevel.GOOD, ZhScoreLevel.EXCELLENT]
 
     def __init__(self, score: float):
         super().__init__(score)
@@ -86,10 +97,10 @@ class NumericScore(AbstractScore):
         return self.score
 
     def to_en_level(self):
-        return EnScoreLevel(self.EN_WORDS[bisect.bisect_right(self.BREAKPOINT, self.score)])
+        return self.EN_WORDS[bisect.bisect_right(self.BREAKPOINT, self.score)]
 
     def to_zh_level(self):
-        return ZhScoreLevel(self.ZH_WORDS[bisect.bisect_right(self.ZH_BREAKPOINT, self.score)])
+        return self.ZH_WORDS[bisect.bisect_right(self.ZH_BREAKPOINT, self.score)]
 
     def to_point(self):
         return self.POINTS[bisect.bisect_right(self.BREAKPOINT, self.score)]
@@ -97,45 +108,52 @@ class NumericScore(AbstractScore):
 
 class FormerNumericScore(NumericScore):
     """2017-2018秋季学期前的数值型成绩
+
     转换算法参照《四川大学本科生等级成绩、百分制成绩、成绩绩点对照表》中，2017-2018秋季学期以前部分之规定
     """
+
     BREAKPOINT = [60, 65, 70, 75, 80, 85, 90, 95]
-    EN_WORDS = ["F", "D-", "D", "C-", "C", "B-", "B", "A-", "A"]
     POINTS = [0, 1, 1.7, 2.2, 2.7, 3.2, 3.6, 3.8, 4]
-    ZH_BREAKPOINT = [60, 70, 76, 85]
-    ZH_WORDS = ["不合格", "合格", "中等", "良好", "优秀"]
+
+    def has_en_lavel(self):
+        """2017-2018秋季学期以前，根据教务处文件，没有提供英语形式的等级
+        """
+        return False
 
 
 class LevelScore(AbstractScore):
     """等级型数据，兼容中英文
+
     转换算法参照《四川大学本科生等级成绩、百分制成绩、成绩绩点对照表》中，2017-2018秋季学期及以后部分之规定
     """
 
     LEVEL_TO_NUM = {
-        "A": 95,
-        "A-": 87,
-        "B+": 82,
-        "B": 77.5,
-        "B-": 74,
-        "C+": 71,
-        "C": 67.5,
-        "C-": 64,
-        "D+": 61.5,
-        "D": 60,
-        "F": 0,
-        "优秀": 92.5,
-        "良好": 80,
-        "中等": 72.5,
-        "合格": 64.5,
-        "不合格": 0
+        EnScoreLevel.A: 95,
+        EnScoreLevel.Aminus: 87,
+        EnScoreLevel.Bplus: 82,
+        EnScoreLevel.B: 77.5,
+        EnScoreLevel.Bminus: 74,
+        EnScoreLevel.Cplus: 71,
+        EnScoreLevel.C: 67.5,
+        EnScoreLevel.Cminus: 64,
+        EnScoreLevel.Dplus: 61.5,
+        EnScoreLevel.D: 60,
+        EnScoreLevel.F: 0,
+        ZhScoreLevel.EXCELLENT: 92.5,
+        ZhScoreLevel.GOOD: 80,
+        ZhScoreLevel.AVERAGE: 72.5,
+        ZhScoreLevel.PASS: 64.5,
+        ZhScoreLevel.FAILED: 0
     }
 
     def __init__(self, level: str or ScoreLevel):
         """可以传入等级枚举或者
         """
 
-        if isinstance(level, ScoreLevel):
-            level = ScoreLevel.value
+        if not isinstance(level, ScoreLevel):
+            import re
+            level = EnScoreLevel(level) if re.match(
+                "[A-F][+-]?", level) else ZhScoreLevel(level)
         super().__init__(level)
 
     def to_num(self):
@@ -153,12 +171,13 @@ class LevelScore(AbstractScore):
 
 class FormerLevelScore(LevelScore):
     """2017-2018秋季学期以前的等级型成绩
+
     转换算法参照《四川大学本科生等级成绩、百分制成绩、成绩绩点对照表》中，2017-2018秋季学期以前部分之规定
     """
     LEVEL_TO_NUM = {
-        "优秀": 92.5,
-        "良好": 80,
-        "中等": 72.5,
-        "合格": 64.5,
-        "不合格": 0
+        ZhScoreLevel.EXCELLENT: 92.5,
+        ZhScoreLevel.GOOD: 80,
+        ZhScoreLevel.AVERAGE: 72.5,
+        ZhScoreLevel.PASS: 64.5,
+        ZhScoreLevel.FAILED: 0
     }
