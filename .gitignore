@@ -1,5 +1,6 @@
 *.ics
 __pycache__
+.pytest_cache
 test.py
 *.log
 dist/
