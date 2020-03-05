@@ -5,3 +5,4 @@ test.py
 *.log
 dist/
 build/
+scu_jwc_unofficial_toolkit.egg-info
