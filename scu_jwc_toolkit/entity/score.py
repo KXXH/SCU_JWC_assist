@@ -1,7 +1,6 @@
 import bisect
 from abc import abstractmethod
 from enum import Enum
-from .exam import ExamType
 
 
 class ScoreLevel(Enum):

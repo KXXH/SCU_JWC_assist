@@ -3,8 +3,6 @@ from typing import Iterable
 from abc import abstractmethod
 from functools import lru_cache
 from ...entity.gradeRecord import GradeRecord, CourseType
-from ...entity.score import NumericScore, LevelScore, FormerLevelScore, FormerNumericScore
-from ...entity.exam import ExamType
 from ...parser.gradeParser import DefaultGradeParser
 
 

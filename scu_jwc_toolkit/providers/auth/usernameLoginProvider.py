@@ -2,11 +2,8 @@ import hashlib
 import requests
 from PIL import Image
 from io import BytesIO
-import json
 import logging
-from ...exceptions.loginException import LoginException
 from ...utils.login_check import login_check, check_error_code
-from .sessionidLoginProvider import SessionidLoginProvider
 from ...config.headerConfig import header
 from ...config.loginConfig import (LOGIN_PAGE_URL,
                                    CAPTCHA_URL, LOGIN_URL,

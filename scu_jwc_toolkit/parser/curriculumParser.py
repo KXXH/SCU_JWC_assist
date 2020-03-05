@@ -40,7 +40,7 @@ class CurriculumParser:
         str = str.strip("0")
         zero_count = str.count("0")
         one_count = str.count("1")
-        return i if one_count == 1 else 1+zero_count//(one_count-1)
+        return 1 if one_count == 1 else 1+zero_count//(one_count-1)
 
     def getClassTime(self, classmark):
         return self.TIME_TABLE.get(classmark)
@@ -63,7 +63,8 @@ class CurriculumParser:
         event.add('dtstart', self.stDate + datetime.timedelta((self.getStartWeek(
             item['classWeek'])-1)*7 + int(item['classDay'])) + self.getClassTime(str(item['classSessions'])))
         event.add('dtend', self.stDate + datetime.timedelta((self.getStartWeek(item['classWeek'])-1)*7 + int(
-            item['classDay'])) + self.getClassTime(str(int(item['classSessions'])+int(item['continuingSession'])-1))+datetime.timedelta(minutes=45))
+            item['classDay'])) + self.getClassTime(
+                str(int(item['classSessions'])+int(item['continuingSession'])-1))+datetime.timedelta(minutes=45))
         interval = self.getClassInterval(item['classWeek'])
         event.add('description', '课程号: ' +
                   item['coureNumber']+'\n课序号: '+item['coureSequenceNumber'])
