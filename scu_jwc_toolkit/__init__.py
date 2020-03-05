@@ -1,1 +1,1 @@
-name = "scu_jwc_sdk"
+name = "scu_jwc_toolkit"
